@@ -28,4 +28,13 @@ class Event(models.Model):
 
     def __str__(self):
         return self.title
-    
+
+class Slot(models.Model):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE,related_name='slots')
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    capacity = models.PositiveIntegerField()
+    booked_count = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.event} at {self.start_time}"
