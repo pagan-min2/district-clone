@@ -1,1 +1,7 @@
 <h1>Welcome, {{ user.username }}!</h1>
+<p>Balance: {{ user.profile.balance }}</p>
+<a href="{% url 'add_money' %}">Add money</a> | <a href="{% url 'transactions' %}">Transaction history</a>
+<form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit">Log out</button>
+</form>
