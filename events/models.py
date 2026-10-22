@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import uuid
 
 class Organization(models.Model):
 
@@ -38,3 +39,12 @@ class Slot(models.Model):
 
     def __str__(self):
         return f"{self.event} at {self.start_time}"
+
+class Ticket(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name= 'tickets')
+    slot = models.ForeignKey(Slot, on_delete=models.CASCADE, related_name = 'tickets')
+    ticket_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    quantity = models.PositiveIntegerField(default=1)
+    amount_paid = models.DecimalField(max_digits=10, decimal_places=2)
+    is_consumed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
