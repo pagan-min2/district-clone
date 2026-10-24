@@ -1,0 +1,22 @@
+<h1>{{ event.title }}</h1>
+<p>{{ event.description }}</p>
+<p>Type: {{ event.get_kind_display }}</p>
+<p>Venue: {{ event.venue }}</p>
+<p>Price: {{ event.price }}</p>
+<p>By: {{ event.organization.name }}</p>
+
+<h2>Available slots</h2>
+<table border="1" cellpadding="6">
+    <tr><th>Start</th><th>End</th><th>Places left</th></tr>
+    {% for s in slots %}
+    <tr>
+        <td>{{ s.start_time }}</td>
+        <td>{{ s.end_time }}</td>
+        <td>{{ s.places_left }} / {{ s.capacity }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="3">No slots yet.</td></tr>
+    {% endfor %}
+</table>
+
+<p><a href="{% url 'event_list' %}">Back to events</a></p>
