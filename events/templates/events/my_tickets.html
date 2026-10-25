@@ -1,0 +1,15 @@
+<h1>My tickets</h1>
+<table border="1" cellpadding="6">
+    <tr><th>Ticket ID</th><th>Event</th><th>Start</th><th>Paid</th></tr>
+    {% for t in tickets %}
+    <tr>
+        <td>{{ t.ticket_id }}</td>
+        <td>{{ t.slot.event.title }}</td>
+        <td>{{ t.slot.start_time }}</td>
+        <td>{{ t.amount_paid }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="4">No active tickets.</td></tr>
+    {% endfor %}
+</table>
+<p><a href="{% url 'event_list' %}">Back to events</a></p>

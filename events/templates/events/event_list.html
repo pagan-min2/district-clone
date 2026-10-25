@@ -3,7 +3,7 @@
     <tr><th>Title</th><th>Type</th><th>Venue</th><th>Price</th></tr>
     {% for e in events %}
     <tr>
-        <td>{{ e.title }}</td>
+        <td><a href="{% url 'event_detail' e.pk %}">{{ e.title }}</a></td>
         <td>{{ e.get_kind_display }}</td>
         <td>{{ e.venue }}</td>
         <td>{{ e.price }}</td>

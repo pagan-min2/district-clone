@@ -4,18 +4,29 @@
 <p>Venue: {{ event.venue }}</p>
 <p>Price: {{ event.price }}</p>
 <p>By: {{ event.organization.name }}</p>
+<p>Your balance: {{ user.profile.balance }}</p>
 
-<h2>Available slots</h2>
+<h2>Slots</h2>
 <table border="1" cellpadding="6">
-    <tr><th>Start</th><th>End</th><th>Places left</th></tr>
+    <tr><th>Start</th><th>End</th><th>Booked</th><th></th></tr>
     {% for s in slots %}
     <tr>
         <td>{{ s.start_time }}</td>
         <td>{{ s.end_time }}</td>
-        <td>{{ s.places_left }} / {{ s.capacity }}</td>
+        <td>{{ s.booked_count }} / {{ s.capacity }}</td>
+        <td>
+            {% if s.booked_count < s.capacity %}
+            <form method="post" action="{% url 'book_slot' s.pk %}">
+                {% csrf_token %}
+                <button type="submit">Book</button>
+            </form>
+            {% else %}
+            Full
+            {% endif %}
+        </td>
     </tr>
     {% empty %}
-    <tr><td colspan="3">No slots yet.</td></tr>
+    <tr><td colspan="4">No slots yet.</td></tr>
     {% endfor %}
 </table>
 
