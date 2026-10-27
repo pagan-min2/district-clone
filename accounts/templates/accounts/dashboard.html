@@ -5,6 +5,7 @@
     <a href="{% url 'my_tickets' %}">My tickets</a> |
     <a href="{% url 'add_money' %}">Add money</a> |
     <a href="{% url 'transactions' %}">Transaction history</a>
+    {% if user.organization %}<a href="{% url 'org_dashboard' %}">Organization dashboard</a>{% endif %}
 </p>
 <form method="post" action="{% url 'logout' %}">
     {% csrf_token %}

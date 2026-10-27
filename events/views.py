@@ -1,10 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from django.http import HttpResponse
+from django.http import HttpResponse,HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
 
 from accounts.models import Profile, Transaction
-from .models import Event, Slot, Ticket
+from .models import Event, Slot, Ticket, Organization
 
 @login_required
 def event_list (request):
@@ -47,3 +47,11 @@ def book_slot(request, pk):
 def my_tickets(request):
     tickets = request.user.tickets.filter(is_consumed=False)
     return render(request, "events/my_tickets.html", {"tickets": tickets})
+
+@login_required
+def org_dashboard(request):
+    org = Organization.objects.filter(user=request.user).first()
+    if org is None:
+        return HttpResponseForbidden("Organizations only")
+    events = org.events.order_by("-created_at")
+    return render(request, "events/org_dashboard.html", {"org": org, "events": events})
