@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.http import HttpResponse,HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
+from .forms import EventForm
 
 from accounts.models import Profile, Transaction
 from .models import Event, Slot, Ticket, Organization
@@ -55,3 +56,19 @@ def org_dashboard(request):
         return HttpResponseForbidden("Organizations only")
     events = org.events.order_by("-created_at")
     return render(request, "events/org_dashboard.html", {"org": org, "events": events})
+
+@login_required
+def event_create(request):
+    org = Organization.objects.filter(user=request.user).first()
+    if org is None:
+        return HttpResponseForbidden("Organizations only")
+    if request.method == "POST":
+        form = EventForm(request.POST)
+        if form.is_valid():
+            event = form.save(commit=False)
+            event.organization = org
+            event.save()
+            return redirect("org_dashboard")
+    else:
+        form = EventForm()
+    return render(request, "events/event_form.html", {"form": form})
