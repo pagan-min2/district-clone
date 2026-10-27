@@ -1,0 +1,7 @@
+<h1>Add slot for {{ event.title }}</h1>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Add slot</button>
+</form>
+<a href="{% url 'org_dashboard' %}">Back</a>

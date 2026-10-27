@@ -8,4 +8,5 @@ urlpatterns = [
     path("my-tickets/", views.my_tickets, name="my_tickets"),
     path("org/", views.org_dashboard, name="org_dashboard"),
     path("org/events/new/", views.event_create, name="event_create"),
+    path("org/events/<int:pk>/slots/new/", views.slot_create, name="slot_create"),
 ]

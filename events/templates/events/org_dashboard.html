@@ -1,6 +1,5 @@
-<h1>{{ org.name }} dashboard</h1>
 <table border="1" cellpadding="6">
-    <tr><th>Title</th><th>Type</th><th>Price</th><th>Active</th><th>Slots</th></tr>
+    <tr><th>Title</th><th>Type</th><th>Price</th><th>Active</th><th>Slots</th><th></th></tr>
     {% for e in events %}
     <tr>
         <td>{{ e.title }}</td>
@@ -8,10 +7,9 @@
         <td>{{ e.price }}</td>
         <td>{{ e.is_active }}</td>
         <td>{{ e.slots.count }}</td>
+        <td><a href="{% url 'slot_create' e.pk %}">Add slot</a></td>
     </tr>
     {% empty %}
-    <tr><td colspan="5">No events yet.</td></tr>
+    <tr><td colspan="6">No events yet.</td></tr>
     {% endfor %}
 </table>
-<p><a href="{% url 'event_create' %}">Create new event</a></p>
-<p><a href="{% url 'dashboard' %}">Back to dashboard</a></p>
