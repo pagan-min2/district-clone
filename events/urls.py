@@ -7,4 +7,5 @@ urlpatterns = [
     path("slot/<int:pk>/book/", views.book_slot, name="book_slot"),
     path("my-tickets/", views.my_tickets, name="my_tickets"),
     path("org/", views.org_dashboard, name="org_dashboard"),
+    path("org/events/new/", views.event_create, name="event_create"),
 ]
