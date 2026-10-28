@@ -102,3 +102,21 @@ def event_tickets(request, pk):
         .order_by("-created_at")
     )
     return render(request, "events/event_tickets.html", {"event": event, "tickets": tickets})
+
+@login_required
+def ticket_consume(request, pk):
+    org = Organization.objects.filter(user=request.user).first()
+    if org is None:
+        return HttpResponseForbidden("Organizations only")
+    if request.method != "POST":
+        return redirect("org_dashboard")
+    with transaction.atomic():
+        ticket = get_object_or_404(
+            Ticket.objects.select_for_update().select_related("slot__event"),
+            pk=pk,
+            slot__event__organization=org,
+        )
+        if not ticket.is_consumed:
+            ticket.is_consumed = True
+            ticket.save()
+    return redirect("event_tickets", ticket.slot.event.pk)
