@@ -1,0 +1,20 @@
+<h1>Tickets for {{ event.title }}</h1>
+<table border="1" cellpadding="6">
+    <tr>
+        <th>Ticket ID</th><th>Buyer</th><th>Slot start</th>
+        <th>Quantity</th><th>Paid</th><th>Consumed</th>
+    </tr>
+    {% for t in tickets %}
+    <tr>
+        <td>{{ t.ticket_id }}</td>
+        <td>{{ t.user.username }}</td>
+        <td>{{ t.slot.start_time }}</td>
+        <td>{{ t.quantity }}</td>
+        <td>{{ t.amount_paid }}</td>
+        <td>{{ t.is_consumed }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="6">No tickets yet.</td></tr>
+    {% endfor %}
+</table>
+<p><a href="{% url 'org_dashboard' %}">Back to dashboard</a></p>

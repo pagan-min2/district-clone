@@ -89,3 +89,16 @@ def slot_create(request, pk):
     else:
         form = SlotForm()
     return render(request, "events/slot_form.html", {"form": form, "event": event})
+
+@login_required
+def event_tickets(request, pk):
+    org = Organization.objects.filter(user=request.user).first()
+    if org is None:
+        return HttpResponseForbidden("Organizations only")
+    event = get_object_or_404(Event, pk=pk, organization=org)
+    tickets = (
+        Ticket.objects.filter(slot__event=event)
+        .select_related("user", "slot")
+        .order_by("-created_at")
+    )
+    return render(request, "events/event_tickets.html", {"event": event, "tickets": tickets})

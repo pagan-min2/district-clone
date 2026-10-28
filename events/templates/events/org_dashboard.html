@@ -1,5 +1,5 @@
 <table border="1" cellpadding="6">
-    <tr><th>Title</th><th>Type</th><th>Price</th><th>Active</th><th>Slots</th><th></th></tr>
+    <tr><th>Title</th><th>Type</th><th>Price</th><th>Active</th><th>Slots</th><th></th><th></th></tr>
     {% for e in events %}
     <tr>
         <td>{{ e.title }}</td>
@@ -8,8 +8,9 @@
         <td>{{ e.is_active }}</td>
         <td>{{ e.slots.count }}</td>
         <td><a href="{% url 'slot_create' e.pk %}">Add slot</a></td>
+        <td><a href="{% url 'event_tickets' e.pk %}">Tickets</a></td>
     </tr>
     {% empty %}
-    <tr><td colspan="6">No events yet.</td></tr>
+    <tr><td colspan="7">No events yet.</td></tr>
     {% endfor %}
 </table>
