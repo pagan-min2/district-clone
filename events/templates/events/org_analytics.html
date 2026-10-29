@@ -1,0 +1,12 @@
+<h1>Analytics</h1>
+<table border="1" cellpadding="6">
+    <tr><th>Event</th><th>Tickets sold</th><th>Revenue</th></tr>
+    {% for e in events %}
+    <tr>
+        <td>{{ e.title }}</td>
+        <td>{{ e.tickets_sold }}</td>
+        <td>{{ e.revenue }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<a href="{% url 'org_dashboard' %}">Back</a>

@@ -3,6 +3,7 @@ from django.db import transaction
 from django.http import HttpResponse,HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
 from .forms import EventForm,SlotForm
+from django.db.models import Count, Sum
 
 from accounts.models import Profile, Transaction
 from .models import Event, Slot, Ticket, Organization
@@ -120,3 +121,14 @@ def ticket_consume(request, pk):
             ticket.is_consumed = True
             ticket.save()
     return redirect("event_tickets", ticket.slot.event.pk)
+
+@login_required
+def org_analytics(request):
+    org = Organization.objects.filter(user = request.user).first()
+    if org is None:
+        return HttpResponseForbidden("Organization Only")
+    events = org.events.annotate(
+        tickets_sold=Count("slots__tickets"),
+        revenue=Sum("slots__tickets__amount_paid"),
+    )
+    return render(request, "events/org_analytics.html", {"events": events})

@@ -11,4 +11,5 @@ urlpatterns = [
     path("org/events/<int:pk>/slots/new/", views.slot_create, name="slot_create"),
     path("org/events/<int:pk>/tickets/", views.event_tickets, name="event_tickets"),
     path("org/tickets/<int:pk>/consume/", views.ticket_consume, name="ticket_consume"),
+    path("org/analytics/", views.org_analytics, name="org_analytics"),
 ]

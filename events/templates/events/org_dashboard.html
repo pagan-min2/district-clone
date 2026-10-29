@@ -9,6 +9,7 @@
         <td>{{ e.slots.count }}</td>
         <td><a href="{% url 'slot_create' e.pk %}">Add slot</a></td>
         <td><a href="{% url 'event_tickets' e.pk %}">Tickets</a></td>
+        <a href="{% url 'org_analytics' %}">Analytics</a>
     </tr>
     {% empty %}
     <tr><td colspan="7">No events yet.</td></tr>
