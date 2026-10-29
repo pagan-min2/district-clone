@@ -8,6 +8,11 @@ from django.db.models import Count, Sum
 from accounts.models import Profile, Transaction
 from .models import Event, Slot, Ticket, Organization
 
+def get_organization(user):
+    if not user.groups.filter(name="Organizations").exists():
+        return None
+    return Organization.objects.filter(user=user).first()
+
 @login_required
 def event_list (request):
     active_events = Event.objects.filter(is_active=True).order_by("-created_at")
@@ -52,7 +57,7 @@ def my_tickets(request):
 
 @login_required
 def org_dashboard(request):
-    org = Organization.objects.filter(user=request.user).first()
+    org = get_organization(request.user)
     if org is None:
         return HttpResponseForbidden("Organizations only")
     events = org.events.order_by("-created_at")
@@ -60,7 +65,7 @@ def org_dashboard(request):
 
 @login_required
 def event_create(request):
-    org = Organization.objects.filter(user=request.user).first()
+    org = get_organization(request.user)
     if org is None:
         return HttpResponseForbidden("Organisation Only")
     if request.method == "POST":
@@ -76,7 +81,7 @@ def event_create(request):
 
 @login_required
 def slot_create(request, pk):
-    org = Organization.objects.filter(user=request.user).first()
+    org = get_organization(request.user)
     if org is None:
         return HttpResponseForbidden("Organizations only")
     event = get_object_or_404(Event, pk=pk, organization=org)
@@ -93,7 +98,7 @@ def slot_create(request, pk):
 
 @login_required
 def event_tickets(request, pk):
-    org = Organization.objects.filter(user=request.user).first()
+    org = get_organization(request.user)
     if org is None:
         return HttpResponseForbidden("Organizations only")
     event = get_object_or_404(Event, pk=pk, organization=org)
@@ -106,7 +111,7 @@ def event_tickets(request, pk):
 
 @login_required
 def ticket_consume(request, pk):
-    org = Organization.objects.filter(user=request.user).first()
+    org = get_organization(request.user)
     if org is None:
         return HttpResponseForbidden("Organizations only")
     if request.method != "POST":
@@ -124,7 +129,7 @@ def ticket_consume(request, pk):
 
 @login_required
 def org_analytics(request):
-    org = Organization.objects.filter(user = request.user).first()
+    org = get_organization(request.user)
     if org is None:
         return HttpResponseForbidden("Organization Only")
     events = org.events.annotate(

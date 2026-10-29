@@ -5,8 +5,10 @@
     <tr>
         <td>{{ e.title }}</td>
         <td>{{ e.tickets_sold }}</td>
-        <td>{{ e.revenue }}</td>
+        <td>{{ e.revenue|default:"0.00" }}</td>
     </tr>
+    {% empty %}
+    <tr><td colspan="3">No events yet.</td></tr>
     {% endfor %}
 </table>
 <a href="{% url 'org_dashboard' %}">Back</a>
