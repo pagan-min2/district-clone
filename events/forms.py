@@ -3,6 +3,7 @@ from .models import Event,Slot
 from django.utils import timezone
 
 class EventForm(forms.ModelForm) :
+    price = forms.DecimalField(min_value=0, max_digits=10, decimal_places=2)
     class Meta :
         model = Event
         fields = ["title","description","kind","price","venue"]
