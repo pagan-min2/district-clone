@@ -4,6 +4,7 @@ from django.http import HttpResponse,HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
 from .forms import EventForm,SlotForm
 from django.db.models import Count, Sum
+from django.utils import timezone
 
 from accounts.models import Profile, Transaction
 from .models import Event, Slot, Ticket, Organization
@@ -36,6 +37,8 @@ def book_slot(request, pk):
             return HttpResponse("Slot is full")
         if profile.balance < price:
             return HttpResponse("Not enough balance")
+        if slot.start_time <= timezone.now():
+            return HttpResponse("This slot has already started")
         slot.booked_count += 1
         slot.save()
         profile.balance -= price
