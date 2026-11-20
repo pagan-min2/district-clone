@@ -30,7 +30,7 @@ def book_slot(request, pk):
     if request.method != "POST":
         return redirect("event_list")
     with transaction.atomic():
-        slot = Slot.objects.select_for_update().get(pk=pk)
+        slot = get_object_or_404(Slot.objects.select_for_update(), pk=pk, event__is_active=True)
         profile = Profile.objects.select_for_update().get(user=request.user)
         price = slot.event.price
         if slot.booked_count >= slot.capacity:
