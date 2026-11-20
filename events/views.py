@@ -3,7 +3,7 @@ from django.db import transaction
 from django.http import HttpResponse,HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
 from .forms import EventForm,SlotForm
-from django.db.models import Count, Sum
+from django.db.models import Count, Sum, F
 from django.utils import timezone
 
 from accounts.models import Profile, Transaction
@@ -48,6 +48,14 @@ def book_slot(request, pk):
             amount=price,
             kind=Transaction.Kind.DEBIT,
             description="Booked " + slot.event.title,
+        )
+        organizer = slot.event.organization.user
+        Profile.objects.filter(user=organizer).update(balance=F("balance") + price)
+        Transaction.objects.create(
+            user=organizer,
+            amount=price,
+            kind=Transaction.Kind.CREDIT,
+            description="Ticket sold: " + slot.event.title,
         )
         Ticket.objects.create(user=request.user, slot=slot, amount_paid=price)
     return redirect("my_tickets")
